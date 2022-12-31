@@ -186,17 +186,15 @@ app.post("/login", async (req, res) => {
 app.post("/search", (req, res) => {
   var searchKey = req.body.Search.toLowerCase();
 
-  if (searchKey === '')
-    res.render("searchresults", { resultsArr: [], notFound: false });
+  var resultsArr = [];
+
+  for (d of destinations) 
+    if (d.includes(searchKey)) 
+      resultsArr.push(d);
+
+  var notFound = resultsArr.length === 0;
+  res.render("searchresults", { resultsArr: resultsArr, notFound: notFound });
   
-  else {
-    var resultsArr = [];
-
-    for (d of destinations) if (d.includes(searchKey)) resultsArr.push(d);
-    var notFound = resultsArr.length === 0;
-    res.render("searchresults", { resultsArr: resultsArr, notFound: notFound });
-  }
-
 });
 
 
