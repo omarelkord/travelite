@@ -160,13 +160,20 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
+  let valid;
 
   if (username === "" || password === "")
     res.render("login", { login_msg: "Fields cannot be empty" });
   else {
-    let valid = await checkCorrectCredentials(username, password);
 
-    if (valid || (username === 'admin' && password === 'admin')) {
+    if(username === 'admin' && password === 'admin'){
+      valid = true;
+    }
+    else{
+      valid = await checkCorrectCredentials(username, password);
+    }
+    
+    if (valid) {
       req.session.authenticated = true;
 
       req.session.sessionID = username;
